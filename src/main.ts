@@ -1,6 +1,7 @@
 import "./index.css";
-import { createGameState, updateGameState, renderGameState, GameState } from "./snake";
+import { createGameState, updateGameState, GameState } from "./snake";
 import Config from "./config";
+import { renderGameState } from "./view";
 
 let gameState: GameState;
 

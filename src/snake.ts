@@ -9,20 +9,20 @@ export interface GameState {
   lastPressedKey: Key;
 }
 
-interface SnakeSegment {
+export interface SnakeSegment {
     position: Position;
     movingPosition: Key;
 }
 
-interface Position {
+export interface Position {
     x: number;
     y: number;
 }
 
 export function createGameState(fieldSize: number): GameState {
     const gameState = {
-        snakeSegments: [],
-        apple: {x: 0,y: 0 },
+        snakeSegments: [{ position: {x: 1, y: 1,}, movingPosition: Key.ARROW_DOWN}, { position: {x: 1, y: 2,}, movingPosition: Key.ARROW_DOWN}, { position: {x: 1, y: 3,}, movingPosition: Key.ARROW_DOWN}],
+        apple: {x: 4,y: 4 },
         isOver: false,
         score: 0,
         fieldSize,
@@ -33,8 +33,4 @@ export function createGameState(fieldSize: number): GameState {
 
 export function updateGameState(gameState: GameState): GameState {
     return gameState;
-}
-
-export function renderGameState(gameState: GameState): void {
-    console.log('view');
 }
