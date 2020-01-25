@@ -34,3 +34,8 @@ export function createGameState(fieldSize: number): GameState {
 export function updateGameState(gameState: GameState): GameState {
     return gameState;
 }
+
+export function updateLastPressedKey(gameState: GameState, key: Key): GameState {
+    const newGameState = {...gameState, lastPressedKey: key}
+    return newGameState;
+}
