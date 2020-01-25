@@ -2,26 +2,32 @@ import { GameState, SnakeSegment, Position } from "./snake";
 import { Color } from "./enums";
 import Config from "./config";
 
-export function renderGameState(gameState: GameState): void {
-    const canvas = getCanvas();
-    const canvasSize = calculateCanvasSize();
-    const cellSize = calculateCellSize(gameState.fieldSize, canvasSize);
-    const context = getContext(canvas);
-    const fieldSize = gameState.fieldSize;
+function drawSquare(x: number, y: number, color: Color, cellSize: number, context: CanvasRenderingContext2D): void {
+    context.fillStyle = color;
+    context.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+}
 
-    resizeCanvas(canvasSize, canvas);
-    resetCanvas(context);
-    drawPlayField(fieldSize, cellSize, context);
-    drawSnake(gameState.snakeSegments, cellSize, context);
-    drawApple(gameState.apple, cellSize, context);
+function drawLine(x1: number, y1: number, x2: number, y2: number, context: CanvasRenderingContext2D): void {
+    context.beginPath();
+    context.moveTo(x1, y1);
+    context.lineTo(x2, y2);
+    context.stroke();
+}
+
+function arrayWithoutHead(array: Array<any>): Array<any> {
+    return array.filter((a) => a !== array[0]);
 }
 
 function drawPlayField(fieldSize: number, cellSize: number, context: CanvasRenderingContext2D): void {
-    const endOfPlayField: number = Config.PLAY_FIELD_SIZE * cellSize + 1;
-        for (let i: number = 0; i <= endOfPlayField; i += cellSize) {
+    const endOfPlayField: number = fieldSize * cellSize + 1;
+        for (let i = 0; i <= endOfPlayField; i += cellSize) {
             drawLine(i, 0, i, endOfPlayField, context);
             drawLine(0, i, endOfPlayField, i, context);
         }
+}
+
+function drawSnakeSegment(snakeSegment: SnakeSegment, color: Color, cellSize: number, context: CanvasRenderingContext2D): void {
+    drawSquare(snakeSegment.position.x, snakeSegment.position.y, color, cellSize, context);
 }
 
 function drawSnake(snakeSegments: SnakeSegment[], cellSize: number, context: CanvasRenderingContext2D): void {
@@ -31,15 +37,13 @@ function drawSnake(snakeSegments: SnakeSegment[], cellSize: number, context: Can
     snakeBody.forEach(snakeSegement => drawSnakeSegment(snakeSegement, Config.SNAKE_SEGMENTS_COLOR, cellSize, context));
 }
 
-function drawSnakeSegment(snakeSegment: SnakeSegment, color: Color, cellSize: number, context: CanvasRenderingContext2D) {
-    drawSquare(snakeSegment.position.x, snakeSegment.position.y, color, cellSize, context);
-}
 
-function drawApple(apple: Position, cellSize: number, context: CanvasRenderingContext2D) {
+
+function drawApple(apple: Position, cellSize: number, context: CanvasRenderingContext2D): void {
     drawSquare(apple.x, apple.y, Config.APPLE_COLOR, cellSize, context);
 }
 
-function resizeCanvas(canvasSize: number, canvas: HTMLCanvasElement) {
+function resizeCanvas(canvasSize: number, canvas: HTMLCanvasElement): void {
     canvas.width = canvasSize;
     canvas.height = canvasSize;
 }
@@ -58,8 +62,8 @@ function calculateCanvasSize(): number {
     return canvasSize;
 }
 
-function resetCanvas(context: CanvasRenderingContext2D): void {
-    const canvasSize = calculateCanvasSize();
+function resetCanvas(context: CanvasRenderingContext2D, canvasSize: number): void {
+    context.clearRect(0, 0, canvasSize, canvasSize);
 }
 
 function getContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
@@ -72,18 +76,16 @@ function getCanvas(): HTMLCanvasElement {
     return canvas
 }
 
-function drawSquare(x: number, y: number, color: Color, cellSize: number, context: CanvasRenderingContext2D) {
-    context.fillStyle = color;
-    context.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-}
+export function renderGameState(gameState: GameState): void {
+    const canvas = getCanvas();
+    const canvasSize = calculateCanvasSize();
+    const cellSize = calculateCellSize(gameState.fieldSize, canvasSize);
+    const context = getContext(canvas);
+    const fieldSize = gameState.fieldSize;
 
-function drawLine(x1: number, y1: number, x2: number, y2: number, context: CanvasRenderingContext2D): void {
-    context.beginPath();
-    context.moveTo(x1, y1);
-    context.lineTo(x2, y2);
-    context.stroke();
-}
-
-function arrayWithoutHead(array: Array<any>) {
-    return array.filter((a) => a !== array[0]);
+    resizeCanvas(canvasSize, canvas);
+    resetCanvas(context, canvasSize);
+    drawPlayField(fieldSize, cellSize, context);
+    drawSnake(gameState.snakeSegments, cellSize, context);
+    drawApple(gameState.apple, cellSize, context);
 }
