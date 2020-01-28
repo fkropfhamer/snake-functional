@@ -32,8 +32,6 @@ function drawSnake(snakeSegments: SnakeSegment[], cellSize: number, context: Can
     snakeBody.forEach(snakeSegement => drawSnakeSegment(snakeSegement, Config.SNAKE_SEGMENTS_COLOR, cellSize, context));
 }
 
-
-
 function drawApple(apple: Position, cellSize: number, context: CanvasRenderingContext2D): void {
     drawSquare(apple.x, apple.y, Config.APPLE_COLOR, cellSize, context);
 }
