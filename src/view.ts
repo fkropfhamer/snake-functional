@@ -14,10 +14,6 @@ function drawLine(x1: number, y1: number, x2: number, y2: number, context: Canva
     context.stroke();
 }
 
-function tail(array: Array<any>): Array<any> {
-    return array.filter((a) => a !== array[0]);
-}
-
 function drawPlayField(fieldSize: number, cellSize: number, context: CanvasRenderingContext2D): void {
     const endOfPlayField: number = fieldSize * cellSize + 1;
         for (let i = 0; i <= endOfPlayField; i += cellSize) {
@@ -31,8 +27,7 @@ function drawSnakeSegment(snakeSegment: SnakeSegment, color: Color, cellSize: nu
 }
 
 function drawSnake(snakeSegments: SnakeSegment[], cellSize: number, context: CanvasRenderingContext2D): void {
-    const snakeHead = snakeSegments[0];
-    const snakeBody = tail(snakeSegments);
+    const [snakeHead, ...snakeBody] = snakeSegments;
     drawSnakeSegment(snakeHead, Config.SNAKE_HEAD_COLOR, cellSize, context);
     snakeBody.forEach(snakeSegement => drawSnakeSegment(snakeSegement, Config.SNAKE_SEGMENTS_COLOR, cellSize, context));
 }
